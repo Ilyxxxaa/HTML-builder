@@ -13,5 +13,5 @@ fs.mkdir(path.join(__dirname, 'files-copy'), { recursive: true }, (err) => {
       });
     });
   });
-  console.log('Directory created successfully!');
+  console.log('Папка скопирована');
 });

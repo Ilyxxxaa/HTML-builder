@@ -9,10 +9,10 @@ async function task03() {
     if (err) {
       return err;
     }
-    console.log(data);
+
     data.forEach((file) => {
       let filePath = path.join(directoryPath, file);
-      console.log(filePath);
+
       fs.stat(filePath, (err, stats) => {
         if (stats.isFile()) {
           console.log(path.parse(filePath).name + ' - ' + path.extname(filePath).slice(1) + ' - ' + stats.size / 1000 + 'kb');
