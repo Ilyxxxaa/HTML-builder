@@ -3,22 +3,32 @@ const path = require('path');
 const pathToAssetsFolder = path.join(__dirname, 'assets');
 const pathToProjectDist = path.join(__dirname, 'project-dist', 'assets');
 
-createFolders();
-replaceHTMLtemplates();
-copyFolder(pathToAssetsFolder, pathToProjectDist);
-cssBundle();
+build();
 
-function createFolders() {
-  fs.mkdir(path.join(__dirname, 'project-dist'), { recursive: true }, (err) => {
-    if (err) {
-      return console.error(err);
-    }
-  });
-  fs.mkdir(path.join(__dirname, 'project-dist', 'assets'), { recursive: true }, (err) => {
-    if (err) {
-      return console.error(err);
-    }
-  });
+async function build() {
+  await deleteOldFolders();
+  await createFolders();
+  replaceHTMLtemplates();
+  copyFolder(pathToAssetsFolder, pathToProjectDist);
+  cssBundle();
+}
+
+async function deleteOldFolders() {
+  try {
+    await fs.promises.access(path.join(__dirname, 'project-dist'));
+    await fs.promises.rm(path.join(__dirname, 'project-dist'), { recursive: true });
+  } catch (err) {
+    return false;
+  }
+}
+
+async function createFolders() {
+  try {
+    await fs.promises.mkdir(path.join(__dirname, 'project-dist'), { recursive: true });
+    await fs.promises.mkdir(path.join(__dirname, 'project-dist', 'assets'), { recursive: true });
+  } catch (err) {
+    throw err;
+  }
 }
 
 function replaceHTMLtemplates() {
